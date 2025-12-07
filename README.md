@@ -245,11 +245,4 @@ Get available filter options for dropdowns.
 ## Architecture Document
 See `/docs/architecture.md` for detailed architecture documentation.
 
-## Notes
-
-- All code is manually written (no auto-generated tools)
-- Clean separation of concerns
-- Modular and maintainable code structure
-- Optimized for large datasets (300MB+)
-- Follows professional coding standards
 
