@@ -9,7 +9,7 @@ const Sidebar = ({ isOpen, onToggle }) => {
           <div className="vault-logo">V</div>
           <div className="vault-info">
             <div className="vault-title">Vault</div>
-            <div className="user-name">Anurag Yadav</div>
+            <div className="user-name">Prajwal Kumar</div>
           </div>
           <div className="dropdown-arrow">▼</div>
         </div>
