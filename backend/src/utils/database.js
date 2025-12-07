@@ -32,7 +32,22 @@ const connectDB = async () => {
       process.exit(0);
     });
   } catch (error) {
-    console.error(`Error: ${error.message}`);
+    console.error(`❌ MongoDB Connection Error: ${error.message}`);
+    
+    // Provide helpful error messages
+    if (error.message.includes('authentication failed') || error.message.includes('bad auth')) {
+      console.error('\n🔧 Authentication Error - Check:');
+      console.error('1. MongoDB Atlas username and password are correct');
+      console.error('2. Password is URL-encoded if it contains special characters');
+      console.error('3. Database user has proper permissions');
+      console.error('4. Connection string format: mongodb+srv://username:password@cluster.../database?options');
+    } else if (error.message.includes('ENOTFOUND') || error.message.includes('getaddrinfo')) {
+      console.error('\n🔧 Network Error - Check:');
+      console.error('1. MongoDB Atlas Network Access allows your IP (or 0.0.0.0/0)');
+      console.error('2. Cluster is running and not paused');
+      console.error('3. Connection string hostname is correct');
+    }
+    
     process.exit(1);
   }
 };

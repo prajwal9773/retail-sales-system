@@ -9,7 +9,8 @@
     "dev": "node --watch src/index.js",
     "import-data": "node src/utils/dataImport.js",
     "import-csv": "node src/utils/csvImport.js",
-    "import-atlas": "node src/utils/atlasImport.js"
+    "import-atlas": "node src/utils/atlasImport.js",
+    "test-connection": "node test-connection.js"
   },
   "keywords": [],
   "author": "",
