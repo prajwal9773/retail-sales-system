@@ -24,6 +24,47 @@ The Retail Sales Management System is a full-stack MERN application designed to 
 └─────────────────┘
 ```
 
+## Architecture Diagram
+
+```mermaid
+graph LR
+
+  %% ===== CLIENT =====
+  U[User] --> FE[React 18 + Vite]
+
+  %% ===== FRONTEND =====
+  subgraph Frontend
+    FE[React App] --> AX[Axios]
+    FE --> UI[UI State: Search, Filters, Sorting, Pagination]
+  end
+
+  %% ===== BACKEND =====
+  AX --> API[Express.js API]
+
+  subgraph Backend
+    API --> ROUTES[Routes]
+    ROUTES --> CTRL[Controllers]
+    CTRL --> SRV[Services]
+    SRV --> MOD[Mongoose Models]
+    SRV --> UTIL[Utils]
+  end
+
+  %% ===== DATABASE =====
+  MOD --> DB[(MongoDB Database)]
+
+  %% ===== CORE FEATURES =====
+  SRV -->|Search: regex on name & phone| DB
+  SRV -->|Filters: region, gender, category, tags, age, date| DB
+  SRV -->|Sorting: date, quantity, customer name| DB
+  SRV -->|Pagination: skip, limit, total count| DB
+
+  %% ===== API ENDPOINTS =====
+  API -->|GET /api/sales/transactions| CTRL
+  API -->|GET /api/sales/filter-options| CTRL
+```
+
+---
+
 ## Backend Architecture
 
 ### Technology Stack
