@@ -1,0 +1,40 @@
+.summary-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.summary-card {
+  background-color: #ffffff;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.summary-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.summary-card-label {
+  font-size: 14px;
+  color: #666;
+  font-weight: 500;
+}
+
+.info-icon {
+  font-size: 16px;
+  cursor: help;
+  opacity: 0.6;
+}
+
+.summary-card-value {
+  font-size: 24px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
