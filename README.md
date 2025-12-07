@@ -1,139 +1,180 @@
 # Retail Sales Management System
 
-## Overview
-A full-stack MERN application for managing and analyzing retail sales data. The system provides advanced search, filtering, sorting, and pagination capabilities to handle large-scale sales datasets (300MB+). Built with clean architecture principles and optimized for performance.
+# Retail Sales Management System
 
-## Tech Stack
+## 1. Overview
 
-### Backend
-- Node.js with ES6 modules
-- Express.js
-- MongoDB with Mongoose
-- CORS
+A full-stack MERN application built to manage, explore, and analyze large-scale retail sales data (300MB+ and 1,000,000+ records).
+It provides fast and efficient **search**, **filtering**, **sorting**, and **pagination** using optimized MongoDB queries and clean architectural patterns.
+The system is modular, scalable, and designed for high performance in real-world data-heavy environments.
 
-### Frontend
-- React 18
-- Vite
-- Axios
-- CSS3
+---
 
-## Search Implementation Summary
-- **Fields**: Customer Name and Phone Number
-- **Method**: Case-insensitive regex search using MongoDB text indexes
-- **Performance**: Debounced input (300ms) on frontend to reduce API calls
-- **Backend**: Combined `$or` query with regex matching on indexed fields
+## 2. Architecture Diagram
 
-## Filter Implementation Summary
-- **Types**: Multi-select dropdowns for Region, Gender, Category, Tags, Payment Method; Range inputs for Age and Date
-- **Method**: MongoDB `$in` operators for multi-select, range queries for numeric/date fields
-- **Combination**: All filters work independently and in combination (AND logic)
-- **State**: Filters preserved during pagination and sorting
-- **Performance**: Indexed fields ensure fast query execution
+```mermaid
+graph LR
 
-## Sorting Implementation Summary
-- **Options**: Date (Newest/Oldest First), Quantity (High to Low/Low to High), Customer Name (A-Z/Z-A)
-- **Method**: MongoDB sort on indexed fields
-- **State**: Sort preference preserved during filtering and pagination
-- **Default**: Date (Newest First)
+  %% ===== CLIENT =====
+  U[User] --> FE[React 18 + Vite]
 
-## Pagination Implementation Summary
-- **Page Size**: Fixed at 10 items per page
-- **Method**: MongoDB `skip()` and `limit()` with total count calculation
-- **Navigation**: Previous/Next buttons and page number display with ellipsis
-- **State**: Current page preserved; resets to page 1 on filter/search change
-- **Performance**: Only fetches required page of data
+  %% ===== FRONTEND =====
+  subgraph Frontend
+    FE[React App] --> AX[Axios]
+    FE --> UI[UI State: Search, Filters, Sorting, Pagination]
+  end
 
-## Setup Instructions
+  %% ===== BACKEND =====
+  AX --> API[Express.js API]
 
-### Prerequisites
-- Node.js (v16 or higher)
-- MongoDB (v4.4 or higher)
-- npm or yarn
+  subgraph Backend
+    API --> ROUTES[Routes]
+    ROUTES --> CTRL[Controllers]
+    CTRL --> SRV[Services]
+    SRV --> MOD[Mongoose Models]
+    SRV --> UTIL[Utils]
+  end
 
-### Backend Setup
+  %% ===== DATABASE =====
+  MOD --> DB[(MongoDB Database)]
 
-1. Navigate to backend directory:
-```bash
-cd backend
+  %% ===== CORE FEATURES =====
+  SRV -->|Search: regex on name & phone| DB
+  SRV -->|Filters: region, gender, category, tags, age, date| DB
+  SRV -->|Sorting: date, quantity, customer name| DB
+  SRV -->|Pagination: skip, limit, total count| DB
+
+  %% ===== API ENDPOINTS =====
+  API -->|GET /api/sales/transactions| CTRL
+  API -->|GET /api/sales/filter-options| CTRL
 ```
 
-2. Install dependencies:
+---
+
+## 3. Tech Stack
+
+### **Frontend**
+
+* React 18
+* Vite
+* Axios
+* CSS3
+
+### **Backend**
+
+* Node.js (ES Modules)
+* Express.js
+* MongoDB
+* Mongoose
+* CORS
+
+---
+
+## 4. Search Implementation Summary
+
+* **Fields Searched:** Customer Name, Phone Number
+* **Method:** Case-insensitive regex search
+* **Backend:** `$or` query across indexed fields
+* **Frontend:** 300ms debounced input
+* **Goal:** Accurate search without overloading the DB
+
+---
+
+## 5. Filter Implementation Summary
+
+* **Filters:** Region, Gender, Category, Tags, Payment Method
+* **Ranges:** Age (min–max), Date (start–end)
+* **Logic:** `$in`, `$gte`, `$lte` operators
+* **Combination:** Full AND logic across all filters
+* **State Preservation:** Filters remain active across operations
+
+---
+
+## 6. Sorting Implementation Summary
+
+* **Options:**
+
+  * Date: Newest → Oldest / Oldest → Newest
+  * Quantity: High → Low / Low → High
+  * Customer Name: A–Z / Z–A
+* **Method:** `.sort()` on indexed fields
+* **Default:** Date (Newest First)
+
+---
+
+## 7. Pagination Implementation Summary
+
+* **Page Size:** 10 records per page
+* **Method:** MongoDB `skip()` + `limit()`
+* **Extras:**
+
+  * Ellipsis page navigation
+  * Previous / Next buttons
+* **State Reset:** Resets to page 1 when search/filter changes
+* **Performance:** Only fetches current page data
+
+---
+
+## 8. Setup Instructions
+
+### **Backend Setup**
+
 ```bash
+cd backend
 npm install
 ```
 
-3. Create `.env` file:
+Create `.env`:
+
 ```
 MONGODB_URI=mongodb://localhost:27017/retail_sales
 PORT=5000
 ```
 
-4. Start MongoDB service (if not running):
+Start MongoDB (example for macOS):
+
 ```bash
-# macOS
 brew services start mongodb-community
-
-# Linux
-sudo systemctl start mongod
-
-# Windows
-net start MongoDB
 ```
 
-5. Import the dataset:
-   - Download the dataset from the provided Google Drive link
-   - Use MongoDB Compass or `mongoimport` to import the data
-   - Collection name should be `salestransactions`
-   - Example with mongoimport:
-   ```bash
-   mongoimport --db retail_sales --collection salestransactions --file dataset.json --jsonArray
-   ```
+Import dataset:
 
-6. Start the backend server:
+```bash
+mongoimport --db retail_sales --collection salestransactions --file dataset.json --jsonArray
+```
+
+Run backend:
+
 ```bash
 npm start
 ```
 
-For development with auto-reload:
+Development mode:
+
 ```bash
 npm run dev
 ```
 
-The backend will be available at `http://localhost:5000`
+---
 
-### Frontend Setup
+### **Frontend Setup**
 
-1. Navigate to frontend directory:
 ```bash
 cd frontend
-```
-
-2. Install dependencies:
-```bash
 npm install
 ```
 
-3. Create `.env` file (optional, defaults to localhost:5000):
+Optional `.env`:
+
 ```
 VITE_API_BASE_URL=http://localhost:5000/api
 ```
 
-4. Start the development server:
+Run frontend:
+
 ```bash
 npm run dev
 ```
-
-The frontend will be available at `http://localhost:3000`
-
-### Production Build
-
-1. Build the frontend:
-```bash
-cd frontend
-npm run build
-```
-
-2. The built files will be in `frontend/dist/`
 
 ## Project Structure
 
